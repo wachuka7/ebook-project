@@ -1,7 +1,9 @@
+import sys
 from db.database import Database
+
 class CLI:
     def __init__(self):
-        self.db = Database()
+        self.db = Database("books.db")
 
     def display_menu(self):
         print("Welcome to the E-book Manager")
@@ -19,7 +21,7 @@ class CLI:
     def create_book(self):
         title = input("Enter the book's title: ")
         author_name = input("Enter the author's name: ")
-        author = self.db.get_author_by_name(author_name)
+        author = self.db.find_author_by_name(author_name)
         if author:
             book = self.db.create_book(title, author)
             print(f"Book {book.title} by {book.author.name} created successfully.")

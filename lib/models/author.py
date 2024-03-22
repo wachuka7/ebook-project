@@ -1,7 +1,8 @@
 class Author:
-    def __init__(self, name):
+    def __init__(self, id, name, books=None):
+        self.id=id
         self.name = name
-        self.books = []
+        self.books = books if books else[]
 
     def add_book(self, book):
         self.books.append(book)

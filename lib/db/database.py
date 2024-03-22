@@ -1,21 +1,48 @@
-from models.book import Book
+import sqlite3
 from models.author import Author
 
 class Database:
-    def __init__(self):
-        self.authors = []
-        self.books = []
+    def __init__(self, db_name):
+        self.conn = sqlite3.connect(db_name)
+        self.cursor = self.conn.cursor()
+
+    def create_tables(self):
+        # Create tables if they don't exist
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS authors (
+                id INTEGER PRIMARY KEY,
+                name TEXT NOT NULL
+            )
+        ''')
+
+        self.cursor.execute('''
+            CREATE TABLE IF NOT EXISTS books (
+                id INTEGER PRIMARY KEY,
+                title TEXT NOT NULL,
+                author_id INTEGER,
+                FOREIGN KEY (author_id) REFERENCES authors(id)
+            )
+        ''')
+        self.conn.commit()
 
     def create_author(self, name):
-        author = Author(name)
-        self.authors.append(author)
-        return author
+        self.cursor.execute('INSERT INTO authors (name) VALUES (?)', (name,))
+        self.conn.commit()
+        
+        # Get the ID of the newly inserted author
+        author_id = self.cursor.lastrowid
+        
+        # Fetch the author object from the database based on the ID
+        self.cursor.execute('SELECT * FROM authors WHERE id = ?', (author_id,))
+        author_data = self.cursor.fetchone()
+        
+        # Create and return the Author object
+        return Author(*author_data) if author_data else None
 
-    def create_book(self, title, author):
-        book = Book(title, author)
-        author.add_book(book)
-        self.books.append(book)
-        return book
+    def create_book(self, title, author_id):
+        self.cursor.execute('INSERT INTO books (title, author_id) VALUES (?, ?)', (title, author_id))
+        self.conn.commit()
+        return self.cursor.lastrowid
 
     def delete_author(self, author):
         self.authors.remove(author)
@@ -30,10 +57,14 @@ class Database:
         return self.books
 
     def find_author_by_name(self, name):
-        for author in self.authors:
-            if author.name == name:
-                return author
-        return None
+        self.cursor.execute("SELECT * FROM authors WHERE name=?", (name,))
+        author_data = self.cursor.fetchone()
+        return Author(*author_data) if author_data else None
+
+    def get_all_authors(self):
+        self.cursor.execute("SELECT * FROM authors")
+        authors_data = self.cursor.fetchall()
+        return [Author(*author_data) for author_data in authors_data]
 
     def find_book_by_title(self, title):
         for book in self.books:
@@ -48,5 +79,6 @@ class Database:
         else:
             return []
 
-  
+    def close(self):
+        self.conn.close()
 
