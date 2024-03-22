@@ -21,12 +21,11 @@ class CLI:
     def create_book(self):
         title = input("Enter the book's title: ")
         author_name = input("Enter the author's name: ")
-        author = self.db.find_author_by_name(author_name)
-        if author:
-            book = self.db.create_book(title, author)
-            print(f"Book {book.title} by {book.author.name} created successfully.")
+        book = self.db.create_book(title, author_name)
+        if book:
+            print(f"Book '{book.title}' by '{author_name}' created successfully.")
         else:
-            print(f"Author {author_name} does not exist.")
+            print(f"Failed to create book '{title}'.")
 
     def display_authors(self):
         print("Authors:")

@@ -1,5 +1,6 @@
 import sqlite3
 from models.author import Author
+from models.book import Book
 
 class Database:
     def __init__(self, db_name):
@@ -39,10 +40,23 @@ class Database:
         # Create and return the Author object
         return Author(*author_data) if author_data else None
 
-    def create_book(self, title, author_id):
+    def create_book(self, title, author_name):
+        existing_author = self.find_author_by_name(author_name)
+        if existing_author:
+            # If the author exists, use the author's ID
+            author_id = existing_author.id
+        else:
+            # If the author doesn't exist, create a new author and use the new author's ID
+            new_author = self.create_author(author_name)
+            author_id = new_author.id
+
         self.cursor.execute('INSERT INTO books (title, author_id) VALUES (?, ?)', (title, author_id))
         self.conn.commit()
-        return self.cursor.lastrowid
+        book_id = self.cursor.lastrowid
+        self.cursor.execute('SELECT * FROM books WHERE id = ?', (book_id,))
+        book_data = self.cursor.fetchone()
+        new_book = Book(*book_data)
+        return new_book
 
     def delete_author(self, author):
         self.authors.remove(author)
