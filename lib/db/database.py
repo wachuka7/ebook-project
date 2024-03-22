@@ -65,10 +65,11 @@ class Database:
         self.books.remove(book)
 
     def get_all_authors(self):
-        return self.authors
-
+        self.cursor.execute("SELECT * FROM authors")
+        return self.cursor.fetchall()
     def get_all_books(self):
-        return self.books
+        self.cursor.execute("SELECT * FROM books")
+        return self.cursor.fetchall()
 
     def find_author_by_name(self, name):
         self.cursor.execute("SELECT * FROM authors WHERE name=?", (name,))

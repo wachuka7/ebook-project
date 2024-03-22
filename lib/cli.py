@@ -29,12 +29,14 @@ class CLI:
 
     def display_authors(self):
         print("Authors:")
-        for author in self.db.authors:
+        authors = self.db.get_all_authors()
+        for author in authors:
             print(author)
 
     def display_books(self):
         print("Books:")
-        for book in self.db.books:
+        books= self.db.get_all_books()
+        for book in books:
             print(book)
 
     def run(self):
