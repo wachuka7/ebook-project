@@ -1,3 +1,4 @@
+from db.database import Database
 class CLI:
     def __init__(self):
         self.db = Database()

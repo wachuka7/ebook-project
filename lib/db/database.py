@@ -1,5 +1,6 @@
 from models.book import Book
 from models.author import Author
+
 class Database:
     def __init__(self):
         self.authors = []
