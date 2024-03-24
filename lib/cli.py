@@ -16,7 +16,10 @@ class CLI:
     def create_author(self):
         name = input("Enter the author's name: ")
         author = self.db.create_author(name)
-        print(f"Author {author.name} created successfully.")
+        if author:
+            print(f"Author {author.name} created successfully.")
+        else:
+            print(f"Failed to create author")
 
     def create_book(self):
         title = input("Enter the book's title: ")

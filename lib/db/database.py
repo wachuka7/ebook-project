@@ -2,6 +2,7 @@ import sqlite3
 from models.author import Author
 from models.book import Book
 
+#defune methods
 class Database:
     def __init__(self, db_name):
         self.conn = sqlite3.connect(db_name)
@@ -57,7 +58,7 @@ class Database:
         book_data = self.cursor.fetchone()
         new_book = Book(*book_data)
         return new_book
-
+#delete object functions
     def delete_author(self, author):
         self.authors.remove(author)
 
@@ -67,6 +68,7 @@ class Database:
     def get_all_authors(self):
         self.cursor.execute("SELECT * FROM authors")
         return self.cursor.fetchall()
+   
     def get_all_books(self):
         self.cursor.execute("SELECT * FROM books")
         return self.cursor.fetchall()

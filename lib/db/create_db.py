@@ -3,7 +3,7 @@ import sqlite3
 def create_database(db_name):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
-
+#creatinmg tables
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS authors (
             id INTEGER PRIMARY KEY,
@@ -25,7 +25,7 @@ def create_database(db_name):
 
     conn.commit()
     conn.close()
-
+#functions to add data to the tables
 def add_data(db_name, authors_data, books_data):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
