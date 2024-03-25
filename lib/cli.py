@@ -6,8 +6,8 @@ class CLI:
 
     def display_menu(self):
         print("Welcome to the E-book Manager")
-        print("1. Create Author")
-        print("2. Create Book")
+        print("1. Add an Author")
+        print("2. Add a Book")
         print("3. Display Authors")
         print("4. Display Books")
         print("5. Delete Book")
@@ -46,10 +46,16 @@ class CLI:
 
     def display_books(self):
         print("Books:")
-        books= self.db.get_all_books()
+        books = self.db.get_all_books()
         for book in books:
-            print(book)
-        
+            author = self.db.find_author_by_id(book.author_id)
+            print(f"Title: {book.title}")
+            print(f"Category: {book.category}")
+            print(f"Year of Publish: {book.year_of_publish}")
+            print(f"Copies Sold: {book.copies_sold}")
+            print(f"Author: {author.name}")
+            print()
+            
     def delete_book(self):
         book_id = input("Enter the ID of the book you want to delete: ")
         success = self.db.delete_book(book_id)
