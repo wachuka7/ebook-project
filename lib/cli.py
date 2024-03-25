@@ -132,7 +132,7 @@ class CLI:
 
     def find_author_by_id(self):
         author_id = input("Enter the ID of the author you want to retrieve: ")
-        author = self.db.get_author_by_id(author_id)
+        author = self.db.find_author_by_id(author_id)
         if author:
             print(f"Author: {author.name}")
         else:
