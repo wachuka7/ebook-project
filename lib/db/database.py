@@ -9,7 +9,7 @@ class Database:
         self.cursor = self.conn.cursor()
 
     def create_tables(self):
-        # Create tables if they don't exist
+        # Creates tables if they don't exist
         self.cursor.execute('''
             CREATE TABLE IF NOT EXISTS authors (
                 id INTEGER PRIMARY KEY,
@@ -33,14 +33,14 @@ class Database:
         self.cursor.execute('INSERT INTO authors (name) VALUES (?)', (name,))
         self.conn.commit()
         
-        # Get the ID of the newly inserted author
+        # Getting the ID of the newly inserted author
         author_id = self.cursor.lastrowid
         
-        # Fetch the author object from the database based on the ID
+        # Fetching the author object from the database based on the ID
         self.cursor.execute('SELECT * FROM authors WHERE id = ?', (author_id,))
         author_data = self.cursor.fetchone()
         
-        # Create and return the Author object
+        # Creating and return the Author object
         return Author(*author_data) if author_data else None
         
     def create_book(self, title, category, year_of_publish, copies_sold,  author_name):
@@ -56,14 +56,11 @@ class Database:
         self.conn.commit()
         book_id = self.cursor.lastrowid
 
-        # Fetch only necessary fields (id, title, author_id) from the database
         self.cursor.execute('SELECT id, title, author_id FROM books WHERE id = ?', (book_id,))
         book_data = self.cursor.fetchone()
 
-        # Fetch author details using author_id
         author = self.find_author_by_name(book_data[2])
 
-        # Create Book object using fetched data and author object
         new_book = Book(book_data[0], book_data[1], category, year_of_publish, copies_sold, author)
         return new_book
 
@@ -124,19 +121,19 @@ class Database:
         self.cursor.execute("SELECT * FROM books WHERE id=?", (book_id,))
         book_data = self.cursor.fetchone()
         if book_data:
-            # Create a Book object from the retrieved data
+            # Creating a Book object from the retrieved data
             return Book(*book_data)
         else:
             return None
         
     def update_book(self, book_id, title=None, category=None, year_of_publish=None, copies_sold=None, author_name=None):
-        # Check if the book with the given ID exists
+        # Checking if the book with the given ID exists
         book = self.find_book_by_id(book_id)
         if not book:
             print("Book not found.")
             return None
 
-        # Update the book's details
+        # Updating the details of the book
         if title is not None:
             book.title = title
         if category is not None:
@@ -146,14 +143,14 @@ class Database:
         if copies_sold is not None:
             book.copies_sold = copies_sold
         if author_name is not None:
-            # Check if the author exists or create a new one
+            # Checking if the author exists or create a new one
             author = self.find_author_by_name(author_name)
             if not author:
                 author = self.create_author(author_name)
-            # Update the book's author ID
+            # Updating the book's author ID
             book.author_id = author.id
 
-        # Update the book in the database
+        # Updating the book in the database
         self.cursor.execute('UPDATE books SET title=?, category=?, year_of_publish=?, copies_sold=?, author_id=? WHERE id=?',
                             (book.title, book.category, book.year_of_publish, book.copies_sold, book.author_id, book_id))
         self.conn.commit()

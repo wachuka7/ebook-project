@@ -6,7 +6,7 @@ class CLI:
 
     def display_menu(self):
         print("Welcome to the E-book Manager")
-        print("0. Exit")
+        
         print("1. Add an Author")
         print("2. Add a Book")
         print("3. Display Authors")
@@ -16,6 +16,7 @@ class CLI:
         print("7. Get Books by Year of Publish")
         print("8. Get Books by Category")
         print("9. Update Book")
+        print("10. Exit")
        
 
     def create_author(self):
@@ -51,8 +52,7 @@ class CLI:
         books = self.db.get_all_books()
         for book in books:
             author = self.db.find_author_by_id(book.author_id)
-            print(f"Title: {book.title}")
-            print(f"Category: {book.category}")
+            print(f"Title: {book.title}, Category: {book.category}")
             print(f"Year of Publish: {book.year_of_publish}")
             print(f"Copies Sold: {book.copies_sold}")
             print(f"Author: {author.name}")
@@ -132,9 +132,8 @@ class CLI:
         while True:
             self.display_menu()
             choice = input("Enter your choice: ")
-            if choice == "0":
-                print("Exiting...")
-            elif choice == "1":
+            
+            if choice == "1":
                 self.create_author()
             elif choice == "2":
                 self.create_book()
@@ -152,6 +151,8 @@ class CLI:
                 self.get_books_by_category()
             elif choice == "9":
                 self.update_book()
+            if choice == "10":
+                print("Exiting...")
                 break
             else:
                 print("Invalid choice. Please try again.")
