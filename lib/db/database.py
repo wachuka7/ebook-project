@@ -119,6 +119,46 @@ class Database:
             return author.books
         else:
             return []
+        
+    def find_book_by_id(self, book_id):
+        self.cursor.execute("SELECT * FROM books WHERE id=?", (book_id,))
+        book_data = self.cursor.fetchone()
+        if book_data:
+            # Create a Book object from the retrieved data
+            return Book(*book_data)
+        else:
+            return None
+        
+    def update_book(self, book_id, title=None, category=None, year_of_publish=None, copies_sold=None, author_name=None):
+        # Check if the book with the given ID exists
+        book = self.find_book_by_id(book_id)
+        if not book:
+            print("Book not found.")
+            return None
+
+        # Update the book's details
+        if title is not None:
+            book.title = title
+        if category is not None:
+            book.category = category
+        if year_of_publish is not None:
+            book.year_of_publish = year_of_publish
+        if copies_sold is not None:
+            book.copies_sold = copies_sold
+        if author_name is not None:
+            # Check if the author exists or create a new one
+            author = self.find_author_by_name(author_name)
+            if not author:
+                author = self.create_author(author_name)
+            # Update the book's author ID
+            book.author_id = author.id
+
+        # Update the book in the database
+        self.cursor.execute('UPDATE books SET title=?, category=?, year_of_publish=?, copies_sold=?, author_id=? WHERE id=?',
+                            (book.title, book.category, book.year_of_publish, book.copies_sold, book.author_id, book_id))
+        self.conn.commit()
+
+        return book
 
     def close(self):
         self.conn.close()

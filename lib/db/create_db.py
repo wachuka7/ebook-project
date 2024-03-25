@@ -37,6 +37,7 @@ def add_data(db_name, authors_data, books_data):
         title, category, year_of_publish, copies_sold, author_id = book_info
         cursor.execute("INSERT INTO books (title, category, year_of_publish, copies_sold, author_id) VALUES ( ?, ?, ?, ?, ?)",
                        (title, category, year_of_publish, copies_sold, author_id,))
+                    
 
     conn.commit()
     conn.close()
