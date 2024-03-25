@@ -42,7 +42,7 @@ class CLI:
         print("Authors:")
         authors = self.db.get_all_authors()
         for author in authors:
-            print(author)
+            print(author.name)
 
     def display_books(self):
         print("Books:")
@@ -70,7 +70,7 @@ class CLI:
         if books:
             print(f"Books by {author_name}:")
             for book in books:
-                print(book)
+                print(book.title)
         else:
             print(f"No books found by {author_name}.")
 
@@ -80,7 +80,7 @@ class CLI:
         if books:
             print(f"Books published in {year}:")
             for book in books:
-                print(book)
+                print(book.title)
         else:
             print(f"No books found published in {year}.")
 
@@ -90,7 +90,7 @@ class CLI:
         if books:
             print(f"Books in category '{category}':")
             for book in books:
-                print(book)
+                print(book.title)
         else:
             print(f"No books found in category '{category}'.")
 
