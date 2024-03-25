@@ -21,6 +21,9 @@ class Database:
             CREATE TABLE IF NOT EXISTS books (
                 id INTEGER PRIMARY KEY,
                 title TEXT NOT NULL,
+                category INTEGER,
+                year_of_publish TEXT NOT NULL,
+                
                 author_id INTEGER,
                 FOREIGN KEY (author_id) REFERENCES authors(id)
             )
@@ -40,24 +43,30 @@ class Database:
         
         # Create and return the Author object
         return Author(*author_data) if author_data else None
-
-    def create_book(self, title, author_name):
+        
+    def create_book(self, title, category, year, copies_sold,  author_name):
         existing_author = self.find_author_by_name(author_name)
         if existing_author:
-            # If the author exists, use the author's ID
             author_id = existing_author.id
         else:
-            # If the author doesn't exist, create a new author and use the new author's ID
             new_author = self.create_author(author_name)
             author_id = new_author.id
 
-        self.cursor.execute('INSERT INTO books (title, author_id) VALUES (?, ?)', (title, author_id))
+        self.cursor.execute('INSERT INTO books (title, category, year_of_publish, copies_sold, author_id) VALUES (?, ?, ?, ?, ?)', (title, category, year, copies_sold, author_id))
         self.conn.commit()
         book_id = self.cursor.lastrowid
-        self.cursor.execute('SELECT * FROM books WHERE id = ?', (book_id,))
+
+        # Fetch only necessary fields (id, title, author_id) from the database
+        self.cursor.execute('SELECT id, title, author_id FROM books WHERE id = ?', (book_id,))
         book_data = self.cursor.fetchone()
-        new_book = Book(*book_data)
+
+        # Fetch author details using author_id
+        author = self.find_author_by_name(book_data[5])
+
+        # Create Book object using fetched data and author object
+        new_book = Book(book_data[0], book_data[1], book_data[2],book_data[3], book_data[4], author)
         return new_book
+
 #delete object functions
     def delete_author(self, author):
         self.authors.remove(author)

@@ -21,10 +21,15 @@ class CLI:
         else:
             print(f"Failed to create author")
 
+
     def create_book(self):
         title = input("Enter the book's title: ")
+        category= input("Enter the category of the book: ")
+        year_of_publish= input("Enter the year of publish: ")
+        copies_sold= input("Enter the number of copies sold: ")
         author_name = input("Enter the author's name: ")
-        book = self.db.create_book(title, author_name)
+
+        book = self.db.create_book(title, category, year_of_publish, copies_sold, author_name)
         if book:
             print(f"Book '{book.title}' by '{author_name}' created successfully.")
         else:
