@@ -1,4 +1,3 @@
-import sys
 from db.database import Database
 
 class CLI:
@@ -11,7 +10,8 @@ class CLI:
         print("2. Create Book")
         print("3. Display Authors")
         print("4. Display Books")
-        print("5. Exit")
+        print("5. Delete Book")
+        print("6. Exit")
 
     def create_author(self):
         name = input("Enter the author's name: ")
@@ -46,6 +46,14 @@ class CLI:
         books= self.db.get_all_books()
         for book in books:
             print(book)
+        
+    def delete_book(self):
+        book_id = input("Enter the ID of the book you want to delete: ")
+        success = self.db.delete_book(book_id)
+        if success:
+            print("Book deleted successfully.")
+        else:
+            print("Failed to delete book. Please check the ID.")
 
     def run(self):
         while True:
@@ -60,6 +68,8 @@ class CLI:
             elif choice == "4":
                 self.display_books()
             elif choice == "5":
+                self.delete_book()
+            elif choice == "6":
                 print("Exiting...")
                 break
             else:

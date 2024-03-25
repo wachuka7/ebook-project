@@ -67,17 +67,11 @@ class Database:
         new_book = Book(book_data[0], book_data[1], category, year_of_publish, copies_sold, author)
         return new_book
 
-#delete object functions
-    def delete_author(self, author):
-        self.authors.remove(author)
+    def delete_book(self, book_id):
+        self.cursor.execute('DELETE FROM books WHERE id = ?', (book_id,))
+        self.conn.commit()
+        return self.cursor.rowcount > 0
 
-    def delete_book(self, book):
-        self.books.remove(book)
-
-    def get_all_authors(self):
-        self.cursor.execute("SELECT * FROM authors")
-        return self.cursor.fetchall()
-   
     def get_all_books(self):
         self.cursor.execute("SELECT * FROM books")
         return self.cursor.fetchall()
