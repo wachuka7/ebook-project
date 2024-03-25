@@ -133,7 +133,7 @@ class Database:
         
     def update_book(self, book_id, title=None, category=None, year_of_publish=None, copies_sold=None, author_name=None):
         # Checking if the book with the given ID exists
-        book = self.find_book_by_id(book_id)
+        book = self.get_book_by_id(book_id)
         if not book:
             print("Book not found.")
             return None

@@ -107,7 +107,7 @@ class CLI:
             return
 
         # Retrieving the book from the database
-        book = self.db.find_book_by_id(book_id)
+        book = self.db.get_book_by_id(book_id)
         if not book:
             print("Book not found. Please check the book ID.")
             return
@@ -132,7 +132,7 @@ class CLI:
 
     def find_author_by_id(self):
         author_id = input("Enter the ID of the author you want to retrieve: ")
-        author = self.db.find_author_by_id(author_id)
+        author = self.db.get_author_by_id(author_id)
         if author:
             print(f"Author: {author.name}")
         else:
