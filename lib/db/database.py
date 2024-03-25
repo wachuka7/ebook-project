@@ -23,7 +23,6 @@ class Database:
                 title TEXT NOT NULL,
                 category INTEGER,
                 year_of_publish TEXT NOT NULL,
-                
                 author_id INTEGER,
                 FOREIGN KEY (author_id) REFERENCES authors(id)
             )
@@ -44,7 +43,7 @@ class Database:
         # Create and return the Author object
         return Author(*author_data) if author_data else None
         
-    def create_book(self, title, category, year, copies_sold,  author_name):
+    def create_book(self, title, category, year_of_publish, copies_sold,  author_name):
         existing_author = self.find_author_by_name(author_name)
         if existing_author:
             author_id = existing_author.id
@@ -52,7 +51,8 @@ class Database:
             new_author = self.create_author(author_name)
             author_id = new_author.id
 
-        self.cursor.execute('INSERT INTO books (title, category, year_of_publish, copies_sold, author_id) VALUES (?, ?, ?, ?, ?)', (title, category, year, copies_sold, author_id))
+        self.cursor.execute('INSERT INTO books (title, category, year_of_publish, copies_sold, author_id) VALUES (?, ?, ?, ?, ?)', 
+                            (title, category, year_of_publish, copies_sold, author_id))
         self.conn.commit()
         book_id = self.cursor.lastrowid
 
@@ -61,10 +61,10 @@ class Database:
         book_data = self.cursor.fetchone()
 
         # Fetch author details using author_id
-        author = self.find_author_by_name(book_data[5])
+        author = self.find_author_by_name(book_data[2])
 
         # Create Book object using fetched data and author object
-        new_book = Book(book_data[0], book_data[1], book_data[2],book_data[3], book_data[4], author)
+        new_book = Book(book_data[0], book_data[1], category, year_of_publish, copies_sold, author)
         return new_book
 
 #delete object functions
