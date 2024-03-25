@@ -75,6 +75,22 @@ class Database:
     def get_all_books(self):
         self.cursor.execute("SELECT * FROM books")
         return self.cursor.fetchall()
+    
+    def get_books_by_author(self, author_name):
+        self.cursor.execute("SELECT * FROM books WHERE author_id IN (SELECT id FROM authors WHERE name = ?)", (author_name,))
+        books_data = self.cursor.fetchall()
+        return [Book(*book_data) for book_data in books_data]
+
+    def get_books_by_year(self, year):
+        self.cursor.execute("SELECT * FROM books WHERE year_of_publish = ?", (year,))
+        books_data = self.cursor.fetchall()
+        return [Book(*book_data) for book_data in books_data]
+
+    def get_books_by_category(self, category):
+        self.cursor.execute("SELECT * FROM books WHERE category = ?", (category,))
+        books_data = self.cursor.fetchall()
+        return [Book(*book_data) for book_data in books_data]
+
 
     def find_author_by_name(self, name):
         self.cursor.execute("SELECT * FROM authors WHERE name=?", (name,))

@@ -11,7 +11,10 @@ class CLI:
         print("3. Display Authors")
         print("4. Display Books")
         print("5. Delete Book")
-        print("6. Exit")
+        print("6. Get Books by Author")
+        print("7. Get Books by Year of Publish")
+        print("8. Get Books by Category")
+        print("9. Exit")
 
     def create_author(self):
         name = input("Enter the author's name: ")
@@ -55,6 +58,36 @@ class CLI:
         else:
             print("Failed to delete book. Please check the ID.")
 
+    def get_books_by_author(self):
+        author_name = input("Enter the author's name: ")
+        books = self.db.get_books_by_author(author_name)
+        if books:
+            print(f"Books by {author_name}:")
+            for book in books:
+                print(book)
+        else:
+            print(f"No books found by {author_name}.")
+
+    def get_books_by_year(self):
+        year = input("Enter the year of publish: ")
+        books = self.db.get_books_by_year(year)
+        if books:
+            print(f"Books published in {year}:")
+            for book in books:
+                print(book)
+        else:
+            print(f"No books found published in {year}.")
+
+    def get_books_by_category(self):
+        category = input("Enter the category of books: ")
+        books = self.db.get_books_by_category(category)
+        if books:
+            print(f"Books in category '{category}':")
+            for book in books:
+                print(book)
+        else:
+            print(f"No books found in category '{category}'.")
+
     def run(self):
         while True:
             self.display_menu()
@@ -70,6 +103,12 @@ class CLI:
             elif choice == "5":
                 self.delete_book()
             elif choice == "6":
+                self.get_books_by_author()
+            elif choice == "7":
+                self.get_books_by_year()
+            elif choice == "8":
+                self.get_books_by_category()
+            elif choice == "9":
                 print("Exiting...")
                 break
             else:
