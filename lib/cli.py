@@ -16,7 +16,9 @@ class CLI:
         print("7. Get Books by Year of Publish")
         print("8. Get Books by Category")
         print("9. Update Book")
-        print("10. Exit")
+        print("10. Find Author by ID")
+        print("11. Find Book by ID")
+        print("12. Exit")
        
 
     def create_author(self):
@@ -128,6 +130,22 @@ class CLI:
         else:
             print(f"Failed to update book with ID {book_id}. Please try again.")
 
+    def find_author_by_id(self):
+        author_id = input("Enter the ID of the author you want to retrieve: ")
+        author = self.db.find_author_by_id(author_id)
+        if author:
+            print(f"Author: {author.name}")
+        else:
+            print("Author not found.")
+
+    def get_book_by_id(self):
+        book_id = input("Enter the ID of the book you want to retrieve: ")
+        book = self.db.get_book_by_id(book_id)
+        if book:
+            print(f"Book: {book.title}")
+        else:
+            print("Book not found.")
+
     def run(self):
         while True:
             self.display_menu()
@@ -151,7 +169,11 @@ class CLI:
                 self.get_books_by_category()
             elif choice == "9":
                 self.update_book()
-            if choice == "10":
+            elif choice == "10":
+                self.find_author_by_id()
+            elif choice == "11":
+                self.get_book_by_id()
+            elif choice == "12":
                 print("Exiting...")
                 break
             else:

@@ -117,12 +117,17 @@ class Database:
         else:
             return []
         
-    def find_book_by_id(self, book_id):
-        self.cursor.execute("SELECT * FROM books WHERE id=?", (book_id,))
+    def find_author_by_id(self, author_id):
+        self.cursor.execute("SELECT * FROM authors WHERE id = ?", (author_id,))
+        author_data = self.cursor.fetchone()
+        return Author(*author_data) if author_data else None
+
+    def get_book_by_id(self, book_id):
+        self.cursor.execute("SELECT * FROM books WHERE id = ?", (book_id,))
         book_data = self.cursor.fetchone()
         if book_data:
-            # Creating a Book object from the retrieved data
-            return Book(*book_data)
+            author = self.find_author_by_id(book_data[4])  # Fetch author using author_id
+            return Book(*book_data[:-1], author)
         else:
             return None
         
